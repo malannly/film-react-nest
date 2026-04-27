@@ -20,16 +20,10 @@ export class OrderService {
         throw new BadRequestException({ error: 'film not found' });
       }
 
-      const session = film.schedule.find(
-        (s) => String(s.id) === String(item.session),
-      );
+      const session = film.schedule.find((s) => s.id === item.session);
 
       if (!session) {
         throw new BadRequestException({ error: 'session not found' });
-      }
-
-      if (!session.taken) {
-      session.taken = [];
       }
 
       const seatKey = `${item.row}:${item.seat}`;
