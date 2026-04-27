@@ -1,4 +1,4 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, ParseUUIDPipe } from '@nestjs/common';
 import { FilmsService } from './films.service';
 
 // принимает hhtp запросы от клиента
@@ -15,7 +15,9 @@ export class FilmsController {
 
   // конкретный фильм
   @Get(':id/schedule')
-  getFilmSchedule(@Param('id') id: string) {
+  getFilmSchedule(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+  ) {
     return this.filmsService.getFilmSchedule(id);
   }
 }

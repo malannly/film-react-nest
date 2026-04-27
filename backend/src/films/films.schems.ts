@@ -46,7 +46,15 @@ export class Film {
       },
     ],
   })
-  schedule: any[];
+  schedule: {
+    id: string;
+    daytime: string;
+    hall: number;
+    rows: number;
+    seats: number;
+    price: number;
+    taken: string[];
+  }[];
 }
 
 export const FilmSchema = SchemaFactory.createForClass(Film);

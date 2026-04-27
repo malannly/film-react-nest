@@ -29,10 +29,6 @@ export class OrderService {
         throw new BadRequestException({ error: 'session not found' });
       }
 
-      if (!session.taken) {
-        session.taken = [];
-      }
-
       const seatKey = `${item.row}:${item.seat}`;
 
       if (session.taken.includes(seatKey)) {

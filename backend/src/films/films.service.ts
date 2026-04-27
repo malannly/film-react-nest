@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { FilmsRepository } from 'src/repository/films.repository';
+import { FilmDto } from './dto/films.dto';
 
 // обработка запросов, бизнес логика, взаимодействие с mongoose, но не напрямую
 @Injectable()
@@ -15,7 +16,7 @@ export class FilmsService {
     };
   }
 
-  async createFilm(dto: any) {
+  async createFilm(dto: FilmDto) {
     return this.repo.create(dto);
   }
 
