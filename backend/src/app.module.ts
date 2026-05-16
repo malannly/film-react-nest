@@ -1,21 +1,21 @@
 import { Module } from '@nestjs/common';
 import { ServeStaticModule } from '@nestjs/serve-static';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigModule } from '@nestjs/config';
 import * as path from 'node:path';
-import { MongooseModule } from '@nestjs/mongoose';
 
 import { FilmsModule } from './films/films.module';
 import { OrderModule } from './order/order.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
 
-    MongooseModule.forRootAsync({
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        uri: configService.get<string>('DATABASE_URL'),
-      }),
+    TypeOrmModule.forRoot({
+      type: 'postgres',
+      url: process.env.DATABASE_URL,
+      autoLoadEntities: true,
+      synchronize: true,
     }),
 
     FilmsModule,

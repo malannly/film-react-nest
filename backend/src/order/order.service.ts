@@ -39,7 +39,7 @@ export class OrderService {
 
       session.taken.push(seatKey);
 
-      await film.save();
+      await this.filmsRepo.save(film);
     }
 
     return {

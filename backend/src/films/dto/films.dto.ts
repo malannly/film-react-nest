@@ -11,7 +11,10 @@ export class FilmDto {
   readonly description: string;
   readonly image: string;
   readonly cover: string;
-  readonly schedule: {
+  readonly schedule: ScheduleDto[]
+}
+
+export class ScheduleDto {
     readonly id: string;
     readonly daytime: string;
     readonly hall: number;
@@ -19,7 +22,6 @@ export class FilmDto {
     readonly seats: number;
     readonly price: number;
     readonly taken: string[];
-  };
 }
 
 // ответ, который ждет фронт
