@@ -3,32 +3,32 @@ import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 
 @Entity('films')
 export class Film {
-    @PrimaryGeneratedColumn('uuid')
-    id: string;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
-    @Column('float')
-    rating: number;
+  @Column('float')
+  rating: number;
 
-    @Column()
-    director: string;
+  @Column()
+  director: string;
 
-    @Column('text')
-    tags: string[];
+  @Column('text')
+  tags: string[];
 
-    @Column()
-    image: string;
+  @Column()
+  image: string;
 
-    @Column()
-    cover: string;
+  @Column()
+  cover: string;
 
-    @Column()
-    title: string;
+  @Column()
+  title: string;
 
-    @Column('text')
-    about: string;
+  @Column('text')
+  about: string;
 
-    @Column('text')
-    description: string;
+  @Column('text')
+  description: string;
 
   @OneToMany(() => Schedule, (schedule) => schedule.film)
   schedule: Schedule[];

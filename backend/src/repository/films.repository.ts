@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Film } from 'src/films/films.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Schedule } from 'src/schedule/schedule.entity';
 
 // работа с бд, делает запросы в mongoose
 @Injectable()
@@ -9,6 +10,8 @@ export class FilmsRepository {
   constructor(
     @InjectRepository(Film)
     private readonly repo: Repository<Film>,
+    @InjectRepository(Schedule)
+    private readonly scheduleRepo: Repository<Schedule>,
   ) {}
 
   async findAll() {
@@ -26,10 +29,15 @@ export class FilmsRepository {
     return this.repo.findOne({
       where: { id: filmId },
       relations: ['schedule'],
+      order: {
+        schedule: {
+          daytime: 'ASC',
+        },
+      },
     });
   }
 
-  async save(film: Film) {
-    return this.repo.save(film);
+  async save(schedule: Schedule) {
+    return this.scheduleRepo.save(schedule);
   }
 }
