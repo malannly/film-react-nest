@@ -11,12 +11,16 @@ import { TypeOrmModule } from '@nestjs/typeorm';
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
 
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      url: process.env.DATABASE_URL,
-      autoLoadEntities: true,
-      synchronize: false,
-    }),
+  TypeOrmModule.forRoot({
+    type: 'postgres',
+    host: 'localhost',
+    port: 5432,
+    username: 'prac',
+    password: '1234',
+    database: 'prac',
+    autoLoadEntities: true,
+    synchronize: true,
+  }),
 
     FilmsModule,
     OrderModule,
