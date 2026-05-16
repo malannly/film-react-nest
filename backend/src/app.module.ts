@@ -19,7 +19,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     password: '1234',
     database: 'prac',
     autoLoadEntities: true,
-    synchronize: true,
+    synchronize: false,
   }),
 
     FilmsModule,
