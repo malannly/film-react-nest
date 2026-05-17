@@ -11,16 +11,16 @@ import { TypeOrmModule } from '@nestjs/typeorm';
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
 
-  TypeOrmModule.forRoot({
-    type: 'postgres',
-    host: 'localhost',
-    port: 5432,
-    username: 'prac',
-    password: '1234',
-    database: 'prac',
-    autoLoadEntities: true,
-    synchronize: false,
-  }),
+    TypeOrmModule.forRoot({
+      type: 'postgres',
+      host: process.env.DB_HOST || '127.0.0.1',
+      port: parseInt(process.env.DB_PORT || '5432'),
+      username: process.env.DB_USERNAME || 'prac',
+      password: process.env.DB_PASSWORD || '1234',
+      database: process.env.DB_NAME || 'prac',
+      autoLoadEntities: true,
+      synchronize: false,
+    }),
 
     FilmsModule,
     OrderModule,
