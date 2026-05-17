@@ -38,6 +38,7 @@ export class FilmsRepository {
   }
 
   async save(schedule: Schedule) {
-    return this.scheduleRepo.save(schedule);
+    const taken = (schedule.taken || []).filter((t) => t !== '');
+    return this.scheduleRepo.update(schedule.id, { taken });
   }
 }
