@@ -11,19 +11,20 @@ import { TypeOrmModule } from '@nestjs/typeorm';
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
 
-  TypeOrmModule.forRootAsync({
+    TypeOrmModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (config: ConfigService) => {
         const dbUrl = new URL(
-          config.get<string>('DATABASE_URL') || 'postgres://localhost:5432/films',
+          config.get<string>('DATABASE_URL') ||
+            'postgres://localhost:5432/prac',
         );
         return {
           type: 'postgres',
           host: dbUrl.hostname,
           port: parseInt(dbUrl.port || '5432'),
           database: dbUrl.pathname.slice(1),
-          username: config.get<string>('DATABASE_USERNAME') || 'postgres',
-          password: config.get<string>('DATABASE_PASSWORD') || 'postgres',
+          username: config.get<string>('DATABASE_USERNAME') || 'prac',
+          password: config.get<string>('DATABASE_PASSWORD') || '1234',
           autoLoadEntities: true,
           synchronize: false,
         };
