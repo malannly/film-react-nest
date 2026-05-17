@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { OrderItemDto } from './dto/order.dto';
 import { FilmsRepository } from 'src/repository/films.repository';
-import { v4 as uuidv4 } from 'uuid';
+import { randomUUID } from 'crypto';
 
 @Injectable()
 export class OrderService {
@@ -46,7 +46,7 @@ export class OrderService {
       total: dto.length,
       items: dto.map((item) => ({
         ...item,
-        id: uuidv4(),
+        id: randomUUID(),
       })),
     };
   }
