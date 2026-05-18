@@ -43,11 +43,11 @@ export class OrderService {
         session,
         seatKey,
       });
+    }
 
-      for (const item of sessionSeat) {
-        item.session.taken.push(item.seatKey);
-        await this.filmsRepo.save(item.session);
-      }
+    for (const item of sessionSeat) {
+      item.session.taken.push(item.seatKey);
+      await this.filmsRepo.save(item.session);
     }
 
     return {
