@@ -14,6 +14,8 @@ export class OrderService {
       });
     }
 
+    const sessionSeat = [];
+
     for (const item of dto) {
       const film = await this.filmsRepo.findScheduleByFilmId(item.film);
 
@@ -37,9 +39,15 @@ export class OrderService {
         });
       }
 
-      session.taken.push(seatKey);
+      sessionSeat.push({
+        session,
+        seatKey,
+      });
 
-      await this.filmsRepo.save(session);
+      for (const item of sessionSeat) {
+        item.session.taken.push(item.seatKey);
+        await this.filmsRepo.save(item.session);
+      }
     }
 
     return {

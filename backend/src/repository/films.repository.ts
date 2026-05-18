@@ -3,6 +3,7 @@ import { Film } from 'src/films/films.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Schedule } from 'src/schedule/schedule.entity';
+import { FilmDto } from 'src/films/dto/films.dto';
 
 // работа с бд, делает запросы в mongoose
 @Injectable()
@@ -20,7 +21,7 @@ export class FilmsRepository {
     });
   }
 
-  async create(data: any) {
+  async create(data: FilmDto) {
     const film = this.repo.create(data);
     return this.repo.save(film);
   }

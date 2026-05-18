@@ -19,7 +19,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
             'postgres://localhost:5432/prac',
         );
         return {
-          type: 'postgres',
+          type: config.get<'postgres'>('DATABASE_DRIVER'),
           host: dbUrl.hostname,
           port: parseInt(dbUrl.port || '5432'),
           database: dbUrl.pathname.slice(1),
