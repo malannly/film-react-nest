@@ -2,6 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { OrderItemDto } from './dto/order.dto';
 import { FilmsRepository } from 'src/repository/films.repository';
 import { randomUUID } from 'crypto';
+import { Schedule } from 'src/schedule/schedule.entity';
 
 @Injectable()
 export class OrderService {
@@ -14,7 +15,8 @@ export class OrderService {
       });
     }
 
-    const sessionSeat = [];
+    // session.id (key) -> session (value)
+    const sessionSeat = new Map<string, Schedule>();
 
     for (const item of dto) {
       const film = await this.filmsRepo.findScheduleByFilmId(item.film);
@@ -31,23 +33,30 @@ export class OrderService {
         throw new BadRequestException({ error: 'session not found' });
       }
 
+      // checks if the session has been bought
+      const bookedSession = sessionSeat.get(session.id);
+
+      // take existed session or new session
+      const currentSession = bookedSession || session;
+
       const seatKey = `${item.row}:${item.seat}`;
 
-      if (session.taken.includes(seatKey)) {
+      if (currentSession.taken.includes(seatKey)) {
         throw new BadRequestException({
           error: 'the seat is already taken',
         });
       }
 
-      sessionSeat.push({
-        session,
-        seatKey,
-      });
+      // adding the session
+      currentSession.taken.push(seatKey);
+
+      // saving the updated session with map
+      sessionSeat.set(currentSession.id, currentSession);
     }
 
-    for (const item of sessionSeat) {
-      item.session.taken.push(item.seatKey);
-      await this.filmsRepo.save(item.session);
+    // saving the session to postgre
+    for (const session of sessionSeat.values()) {
+      await this.filmsRepo.save(session);
     }
 
     return {
