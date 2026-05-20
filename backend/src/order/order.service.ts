@@ -15,8 +15,7 @@ export class OrderService {
       });
     }
 
-    // session.id (key) -> session (value)
-    const sessionSeat = new Map<string, Schedule>();
+    const addSession = [];
 
     for (const item of dto) {
       const film = await this.filmsRepo.findScheduleByFilmId(item.film);
@@ -33,28 +32,35 @@ export class OrderService {
         throw new BadRequestException({ error: 'session not found' });
       }
 
-      // checks if the session has been bought
-      const bookedSession = sessionSeat.get(session.id);
-
-      // take existed session or new session
-      const currentSession = bookedSession || session;
-
       const seatKey = `${item.row}:${item.seat}`;
 
-      if (currentSession.taken.includes(seatKey)) {
+      if (session.taken.includes(seatKey)) {
         throw new BadRequestException({
           error: 'the seat is already taken',
         });
       }
 
-      // adding the session
-      currentSession.taken.push(seatKey);
+      addSession.push({
+        session,
+        seatKey,
+      });
+    }
 
-      // saving the updated session with map
+    // session.id (key) -> session (value)
+    const sessionSeat = new Map<string, Schedule>();
+
+    for (const item of addSession) {
+      // if session has already existed
+      const bookedSession = sessionSeat.get(item.session.id);
+      // old session or new one
+      const currentSession = bookedSession || item.session;
+      // adding taken seats to the list
+      currentSession.taken.push(item.seatKey);
+      // putting taken seats to the map, so it can be saved to db
       sessionSeat.set(currentSession.id, currentSession);
     }
 
-    // saving the session to postgre
+    // saving session to postgre
     for (const session of sessionSeat.values()) {
       await this.filmsRepo.save(session);
     }
