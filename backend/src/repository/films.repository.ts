@@ -1,24 +1,45 @@
-import { Model } from 'mongoose';
-import { InjectModel } from '@nestjs/mongoose';
 import { Injectable } from '@nestjs/common';
+import { Film } from 'src/films/films.entity';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Schedule } from 'src/schedule/schedule.entity';
 import { FilmDto } from 'src/films/dto/films.dto';
-import { FilmDocument } from 'src/films/films.schems';
 
 // работа с бд, делает запросы в mongoose
 @Injectable()
 export class FilmsRepository {
-  constructor(@InjectModel('Film') private filmModel: Model<FilmDocument>) {}
+  constructor(
+    @InjectRepository(Film)
+    private readonly repo: Repository<Film>,
+    @InjectRepository(Schedule)
+    private readonly scheduleRepo: Repository<Schedule>,
+  ) {}
 
   async findAll() {
-    const films = await this.filmModel.find();
-    return films;
+    return this.repo.find({
+      relations: ['schedule'],
+    });
   }
 
-  async create(data: Partial<FilmDto>) {
-    return this.filmModel.create(data);
+  async create(data: FilmDto) {
+    const film = this.repo.create(data);
+    return this.repo.save(film);
   }
 
   async findScheduleByFilmId(filmId: string) {
-    return this.filmModel.findOne({ id: filmId });
+    return this.repo.findOne({
+      where: { id: filmId },
+      relations: ['schedule'],
+      order: {
+        schedule: {
+          daytime: 'ASC',
+        },
+      },
+    });
+  }
+
+  async save(schedule: Schedule) {
+    const taken = (schedule.taken || []).filter((t) => t !== '');
+    return this.scheduleRepo.update(schedule.id, { taken });
   }
 }
