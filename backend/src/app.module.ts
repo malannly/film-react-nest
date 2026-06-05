@@ -16,7 +16,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       useFactory: (config: ConfigService) => {
         const dbUrl = new URL(
           config.get<string>('DATABASE_URL') ||
-            'postgres://localhost:5432/prac',
+            'postgres://prac:1234@db:5432/prac',
         );
         return {
           type: config.get<'postgres'>('DATABASE_DRIVER'),
