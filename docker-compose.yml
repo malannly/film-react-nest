@@ -23,9 +23,6 @@ services:
       - .env.production
     ports:
       - '3001:3000'
-    # volumes:
-    #   - ./backend:/app
-    #   - /app/node_modules
 
   # postgreSQL
   db:
@@ -51,10 +48,18 @@ services:
     ports:
       - '8080:80'
     depends_on:
-      - db 
+      - db
 
+  frontend:
+    container_name: frontend
+    build:
+      context: .
+      dockerfile: nginx/Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - app-prod
 
 volumes:
   db-data:
-
      
