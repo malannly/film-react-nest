@@ -1,21 +1,21 @@
-import { OrderService } from "../order/order.service";
-import { OrderController } from "../order/order.controller";
-import { CreateOrderDto, OrderItemDto } from "../order/dto/order.dto";
-import { Test } from "@nestjs/testing";
+import { OrderService } from '../order/order.service';
+import { OrderController } from '../order/order.controller';
+import { CreateOrderDto, OrderItemDto } from '../order/dto/order.dto';
+import { Test } from '@nestjs/testing';
 
 const orderItemDto: OrderItemDto = {
-    film: 'Back to the future',
-    session: 'night',
-    daytime: '21.00',
-    row: 1,
-    seat: 2,
-    price: 3
-}
+  film: 'Back to the future',
+  session: 'night',
+  daytime: '21.00',
+  row: 1,
+  seat: 2,
+  price: 3,
+};
 
 const createOrderDto: CreateOrderDto = {
   email: 'razrabotchuk@gmail.com',
   phone: '+71234567890',
-  tickets: [orderItemDto]
+  tickets: [orderItemDto],
 };
 
 describe('orderController', () => {
@@ -29,20 +29,20 @@ describe('orderController', () => {
         {
           provide: OrderService,
           useValue: {
-            createOrder: jest.fn()
-          }
-        }
-      ]
+            createOrder: jest.fn(),
+          },
+        },
+      ],
     }).compile();
     orderController = moduleRef.get(OrderController);
     orderService = moduleRef.get(OrderService);
   });
 
-    it('.createOrder() should call createOrder method of the service', () => {
-        const item = createOrderDto;
+  it('.createOrder() should call createOrder method of the service', () => {
+    const item = createOrderDto;
 
-        orderController.createOrder(item);
+    orderController.createOrder(item);
 
-        expect(orderService.createOrder).toHaveBeenCalledWith(item);
+    expect(orderService.createOrder).toHaveBeenCalledWith(item);
   });
 });
