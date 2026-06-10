@@ -1,5 +1,5 @@
 import { FilmsController } from 'src/films/films.controller';
-import { FilmDto, ScheduleDto, FilmsDetailsDto } from '../films/dto/films.dto';
+import { FilmDto, ScheduleDto } from '../films/dto/films.dto';
 import { FilmsService } from 'src/films/films.service';
 import { Test } from '@nestjs/testing';
 
