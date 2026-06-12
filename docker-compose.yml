@@ -14,11 +14,9 @@ services:
       - ./backend:/app
       - /app/node_modules
 
-  app-prod:
+  backend:
+    image: ghcr.io/malannly/film-backend:latest
     container_name: nestjs-app-prod
-    build:
-      context: ./backend
-      dockerfile: Dockerfile.prod
     env_file:
       - .env.production
     ports:
@@ -51,15 +49,68 @@ services:
       - db
 
   frontend:
-    container_name: frontend
+    image: ghcr.io/malannly/film-frontend:latest
     build:
-      context: .
-      dockerfile: nginx/Dockerfile
-    ports:
-      - "80:80"
+      context: frontend
+    environment:
+      VITE_base_url: /
+      VITE_API_URL: /api.afisha
+      VITE_CND_URL: /content/afisha
     depends_on:
-      - app-prod
+      - backend
+    volumes:
+      - frontend_build:/app/dist
 
 volumes:
   db-data:
+  frontend_build:
      
+# services:
+#   backend:
+#     image: ghcr.io/malannly/film-backend:latest
+#     container_name: backend
+#     restart: unless-stopped
+#     environment:
+#       DATABASE_DRIVER: postgres
+#       DATABASE_URL: postgres://prac:1234@db:5432/prac
+#       DATABASE_USERNAME: prac
+#       DATABASE_PASSWORD: 1234
+#     ports:
+#       - "3000:3000"
+#     depends_on:
+#       - db
+
+#   frontend:
+#     image: ghcr.io/malannly/film-frontend:latest
+#     container_name: frontend
+#     restart: unless-stopped
+#     ports:
+#       - "80:80"
+#     depends_on:
+#       - backend
+
+#   db:
+#     image: postgres:17-alpine
+#     container_name: db
+#     restart: unless-stopped
+#     environment:
+#       POSTGRES_DB: prac
+#       POSTGRES_USER: prac
+#       POSTGRES_PASSWORD: 1234
+#     volumes:
+#       - postgres_data:/var/lib/postgresql/data
+
+#   pgadmin:
+#     image: dpage/pgadmin4
+#     container_name: pgadmin
+#     restart: unless-stopped
+#     environment:
+#       PGADMIN_DEFAULT_EMAIL: admin@gmail.com
+#       PGADMIN_DEFAULT_PASSWORD: 1234
+#     ports:
+#       - "8080:80"
+#     depends_on:
+#       - db
+
+# volumes:
+#   postgres_data:
