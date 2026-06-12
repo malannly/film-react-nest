@@ -36,6 +36,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
     ServeStaticModule.forRoot({
       rootPath: path.join(__dirname, '..', 'public'),
+      serveRoot: '/',
     }),
   ],
 })
