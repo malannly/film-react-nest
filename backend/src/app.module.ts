@@ -35,7 +35,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     OrderModule,
 
     ServeStaticModule.forRoot({
-      rootPath: path.join(__dirname, '..', 'public'),
+      rootPath: path.join(__dirname, '..', 'public', 'content', 'afisha'),
       serveRoot: '/content/afisha',
       serveStaticOptions: {
         index: false,
