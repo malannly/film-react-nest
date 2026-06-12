@@ -1,0 +1,16 @@
+FROM node:22-alpine as development
+
+# working directory inside the container
+WORKDIR /app
+
+# copy packege.json and packege-lock.json
+COPY package*.json ./
+
+# install dependecies
+RUN npm install
+
+# copy the rest of the files
+COPY . .
+
+# start the application
+CMD ["npm", "run", "start:dev"]

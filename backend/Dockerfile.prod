@@ -1,0 +1,32 @@
+FROM node:22-alpine as build
+
+# working directory inside the container
+WORKDIR /app
+
+# copy packege.json and packege-lock.json
+COPY package*.json ./
+
+# install dependecies
+RUN npm install
+
+# copy the rest of the files
+COPY . . 
+
+# build the application
+RUN npm run build
+
+# production stage
+FROM node:22-alpine AS production
+
+# working directory inside the container
+WORKDIR /app
+
+COPY package*.json ./
+
+RUN npm install --omit=dev
+
+COPY --from=build /app/dist ./dist
+COPY --from=build /app/public ./public
+
+# start the application
+CMD ["node", "dist/main"]
